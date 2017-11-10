@@ -29,9 +29,10 @@ each service:
     #   aslive-my-example.dev.mmgapi.net
 
     module "tf_backend_service_routing" "notifications-profile-matching-service" {
-        domain           = "mmgapi.net"
-        name             = "notifications-profile-matching"
+        source           = "github.com/mergermarket/tf_backend_service_routing"
         env              = "${var.env}"
+        name             = "notifications-profile-matching"
+        domain           = "mmgapi.net"
         priority         = "100"
         target_group_arn = "${var.target_groups["notifications-profile-matching-service"]}"
         alb_listener_arn = "${module.backend_router.alb_listener_arn}" 
