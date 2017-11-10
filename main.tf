@@ -49,5 +49,5 @@ resource "aws_route53_record" "dns_record" {
   records = ["${var.alb_dns_name}"]
   ttl     = "${var.ttl}"
 
-  depends_on = ["aws_alb_listener_rule", "rule"]
+  depends_on = ["aws_alb_listener_rule.rule"]
 }
