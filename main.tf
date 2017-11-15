@@ -16,8 +16,8 @@ data "template_file" "fqdn" {
 
   vars {
     env = "${var.env}"
-    name = "${var.name}"
-    domain = "${var.domain}"
+    name = "${var.dns_name != "" ? var.dns_name : replace(var.component_name, "-service$", "")}"
+    domain = "${var.dns_domain}"
   }
 }
 
@@ -42,7 +42,7 @@ resource "aws_alb_listener_rule" "rule" {
 }
 
 resource "aws_alb_target_group" "target_group" {
-  name = "${data.template_file.fqdn.rendered}"
+  name = "${replace(replace("${var.env}-${var.component_name}", "/(.{0,32}).*/", "$1"), "/^-+|-+$/", "")}"
 
   # port will be set dynamically, but for some reason AWS requires a value
   port                 = "31337"
