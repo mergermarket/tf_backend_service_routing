@@ -20,7 +20,7 @@ variable "dns_domain" {
 
 variable "ttl" {
   description = "Time to live"
-  default = "60"
+  default     = "60"
 }
 
 variable "alb_dns_name" {

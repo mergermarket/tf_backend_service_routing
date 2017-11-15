@@ -3,21 +3,21 @@ data "aws_route53_zone" "dns_domain" {
 }
 
 data "template_file" "domain" {
-  template = "$${env == "live" ? "$${domain}" : "dev.$${domain}"}."
+  template = "$${env == "live" ? "$${dns_domain}" : "dev.$${dns_domain}"}."
 
   vars {
-    env    = "${var.env}"
-    domain = "${var.dns_domain}"
+    env        = "${var.env}"
+    dns_domain = "${var.dns_domain}"
   }
 }
 
 data "template_file" "fqdn" {
-  template = "$${env == "live" ? "$${name}.$${domain}" : "$${env}-$${name}.dev.$${domain}"}"
+  template = "$${env == "live" ? "$${name}.$${dns_domain}" : "$${env}-$${name}.dev.$${dns_domain}"}"
 
   vars {
-    env = "${var.env}"
-    name = "${var.dns_name != "" ? var.dns_name : replace(var.component_name, "-service$", "")}"
-    domain = "${var.dns_domain}"
+    env        = "${var.env}"
+    name       = "${var.dns_name != "" ? var.dns_name : replace(var.component_name, "-service$", "")}"
+    dns_domain = "${var.dns_domain}"
   }
 }
 
