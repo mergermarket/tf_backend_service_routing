@@ -16,7 +16,7 @@ data "template_file" "fqdn" {
 
   vars {
     env        = "${var.env}"
-    name       = "${var.dns_name != "" ? var.dns_name : replace(var.component_name, "/-service$/", "")}"
+    name       = "${var.override_dns_name != "" ? var.override_dns_name : replace(var.component_name, "/-service$/", "")}"
     dns_domain = "${var.dns_domain}"
   }
 }

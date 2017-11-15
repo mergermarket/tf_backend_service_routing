@@ -8,7 +8,7 @@ variable "component_name" {
   default     = ""
 }
 
-variable "dns_name" {
+variable "override_dns_name" {
   type        = "string"
   description = "The first part of the DNS name without the environment (defaults to component_name with -service suffix removed)"
   default     = ""
