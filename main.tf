@@ -7,7 +7,7 @@ data "template_file" "domain" {
 
   vars {
     env    = "${var.env}"
-    domain = "${var.domain}"
+    domain = "${var.dns_domain}"
   }
 }
 
