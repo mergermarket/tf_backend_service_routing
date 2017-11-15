@@ -27,7 +27,7 @@ resource "aws_alb_listener_rule" "rule" {
 
   action {
     type             = "forward"
-    target_group_arn = "${var.target_group_arn}"
+    target_group_arn = "${aws_alb_target_group.target_group.arn}"
   }
 
   condition {
@@ -38,6 +38,29 @@ resource "aws_alb_listener_rule" "rule" {
   condition {
     field  = "path-pattern"
     values = ["*"]
+  }
+}
+
+resource "aws_alb_target_group" "target_group" {
+  name = "${data.template_file.fqdn.rendered}"
+
+  # port will be set dynamically, but for some reason AWS requires a value
+  port                 = "31337"
+  protocol             = "HTTP"
+  vpc_id               = "${var.vpc_id}"
+  deregistration_delay = "${var.deregistration_delay}"
+
+  health_check {
+    interval            = "${var.health_check_interval}"
+    path                = "${var.health_check_path}"
+    timeout             = "${var.health_check_timeout}"
+    healthy_threshold   = "${var.health_check_healthy_threshold}"
+    unhealthy_threshold = "${var.health_check_unhealthy_threshold}"
+    matcher             = "${var.health_check_matcher}"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
