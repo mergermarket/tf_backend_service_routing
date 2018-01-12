@@ -49,7 +49,7 @@ locals {
 
 resource "aws_alb_target_group" "target_group" {
   name = "${
-    target_group_name_length > 32 ?
+    local.target_group_name_length > 32 ?
       join("", list(substr("${local.target_group_name}", 0, local.target_group_name_length <= 32 ? 0 : 24), local.target_group_name_sha1)) :
       "${local.target_group_name}"
   }"
