@@ -62,6 +62,12 @@ resource "aws_alb_target_group" "target_group" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags {
+    component = "${var.component_name}"
+    env       = "${var.env}"
+    service   = "${var.env}-${var.component_name}"
+  }
 }
 
 resource "aws_route53_record" "dns_record" {
