@@ -15,7 +15,8 @@ variable "override_dns_name" {
 }
 
 variable "dns_domain" {
-  description = "The top level domain the service should live under - e.g. mmgapi.net"
+  description = "The top level domain the service should live under - e.g. mmgapi.net. If blank (the default) then no DNS record will be created"
+  default     = ""
 }
 
 variable "ttl" {
