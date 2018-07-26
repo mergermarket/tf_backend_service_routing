@@ -64,9 +64,9 @@ resource "aws_alb_target_group" "target_group" {
   }
 
   tags {
-    component = "${var.component_name}"
-    env       = "${var.env}"
-    service   = "${var.env}-${var.component_name}"
+    component   = "${var.component_name}"
+    environment = "${var.env}"
+    service     = "${var.env}-${var.component_name}"
   }
 }
 
