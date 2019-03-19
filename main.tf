@@ -74,9 +74,10 @@ resource "aws_route53_record" "dns_record" {
   zone_id = "${data.aws_route53_zone.dns_domain.zone_id}"
   name    = "${data.template_file.fqdn.rendered}"
 
-  type    = "CNAME"
-  records = ["${var.alb_dns_name}"]
-  ttl     = "${var.ttl}"
+  type            = "CNAME"
+  records         = ["${var.alb_dns_name}"]
+  ttl             = "${var.ttl}"
+  allow_overwrite = "${var.allow_overwrite}"
 
   depends_on = ["aws_alb_listener_rule.rule"]
 }
