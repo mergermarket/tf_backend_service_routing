@@ -88,3 +88,9 @@ variable "allow_overwrite" {
   type        = "string"
   default     = "false"
 }
+
+variable "hash_target_group_name" {
+  description = "Include a hash of the target group name when naming it to avoid collisions"
+  type        = "string"
+  default     = "false"
+}
