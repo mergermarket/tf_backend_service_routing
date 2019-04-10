@@ -4,6 +4,6 @@ output "target_group_arn" {
 }
 
 output "dns_name" {
-  value       = "${data.template_file.fqdn.rendered}"
+  value       = "${local.dns_name}.${var.dns_domain}"
   description = "The DNS name for the service."
 }
