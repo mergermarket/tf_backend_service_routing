@@ -1,24 +1,9 @@
+locals {
+  dns_name = "${var.override_dns_name != "" ? var.override_dns_name : replace(var.component_name, "/-service$/", "")}"
+}
+
 data "aws_route53_zone" "dns_domain" {
-  name = "${data.template_file.domain.rendered}"
-}
-
-data "template_file" "domain" {
-  template = "$${env == "live" ? "$${dns_domain}" : "dev.$${dns_domain}"}."
-
-  vars {
-    env        = "${var.env}"
-    dns_domain = "${var.dns_domain}"
-  }
-}
-
-data "template_file" "fqdn" {
-  template = "$${env == "live" ? "$${name}.$${dns_domain}" : "$${env}-$${name}.dev.$${dns_domain}"}"
-
-  vars {
-    env        = "${var.env}"
-    name       = "${var.override_dns_name != "" ? var.override_dns_name : replace(var.component_name, "/-service$/", "")}"
-    dns_domain = "${var.dns_domain}"
-  }
+  name = "${var.dns_domain}"
 }
 
 resource "aws_alb_listener_rule" "rule" {
@@ -32,7 +17,7 @@ resource "aws_alb_listener_rule" "rule" {
 
   condition {
     field  = "host-header"
-    values = ["${data.template_file.fqdn.rendered}"]
+    values = ["${local.dns_name}.${var.dns_domain}"]
   }
 
   condition {
@@ -81,7 +66,7 @@ resource "aws_alb_target_group" "target_group" {
 
 resource "aws_route53_record" "dns_record" {
   zone_id = "${data.aws_route53_zone.dns_domain.zone_id}"
-  name    = "${data.template_file.fqdn.rendered}"
+  name    = "${local.dns_name}.${var.dns_domain}"
 
   type            = "CNAME"
   records         = ["${var.alb_dns_name}"]
