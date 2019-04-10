@@ -41,8 +41,17 @@ resource "aws_alb_listener_rule" "rule" {
   }
 }
 
+locals {
+  old_target_group_name = "${replace(replace("${var.env}-${var.component_name}", "/(.{0,32}).*/", "$1"), "/^-+|-+$/", "")}"
+
+  target_group_name_hash    = "${base64sha256("${var.env}-${var.component_name}")}"
+  target_group_name_postfix = "${replace(replace("${local.target_group_name_hash}", "/(.{0,12}).*/", "$1"), "/^-+|-+$/", "")}"
+  target_group_name_prefix  = "${replace(replace("${var.env}-${var.component_name}", "/(.{0,20}).*/", "$1"), "/^-+|-+$/", "")}"
+  target_group_name         = "${local.target_group_name_prefix}${local.target_group_name_postfix}"
+}
+
 resource "aws_alb_target_group" "target_group" {
-  name = "${replace(replace("${var.env}-${var.component_name}", "/(.{0,32}).*/", "$1"), "/^-+|-+$/", "")}"
+  name = "${var.hash_target_group_name ? local.target_group_name : local.old_target_group_name}"
 
   # port will be set dynamically, but for some reason AWS requires a value
   port                 = "31337"
