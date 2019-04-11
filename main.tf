@@ -66,7 +66,7 @@ resource "aws_alb_target_group" "target_group" {
 
 resource "aws_route53_record" "dns_record" {
   zone_id = "${data.aws_route53_zone.dns_domain.zone_id}"
-  name    = "${local.dns_name}.${var.dns_domain}"
+  name    = "${var.env}-${local.dns_name}.${var.dns_domain}"
 
   type            = "CNAME"
   records         = ["${var.alb_dns_name}"]
