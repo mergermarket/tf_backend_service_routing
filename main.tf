@@ -42,9 +42,9 @@ resource "aws_alb_listener_rule" "rule" {
 }
 
 locals {
-  target_group_name = "${var.env}-${var.component_name}"
+  target_group_name        = "${var.env}-${var.component_name}"
   target_group_name_length = "${length(local.target_group_name)}"
-  target_group_name_sha1 = "${substr(sha1(local.target_group_name), 0, 8)}"
+  target_group_name_sha1   = "${substr(sha1(local.target_group_name), 0, 8)}"
 }
 
 resource "aws_alb_target_group" "target_group" {
@@ -78,9 +78,10 @@ resource "aws_route53_record" "dns_record" {
   zone_id = "${data.aws_route53_zone.dns_domain.zone_id}"
   name    = "${data.template_file.fqdn.rendered}"
 
-  type    = "CNAME"
-  records = ["${var.alb_dns_name}"]
-  ttl     = "${var.ttl}"
+  type            = "CNAME"
+  records         = ["${var.alb_dns_name}"]
+  ttl             = "${var.ttl}"
+  allow_overwrite = "${var.allow_overwrite}"
 
   depends_on = ["aws_alb_listener_rule.rule"]
 }

@@ -81,3 +81,9 @@ variable "health_check_matcher" {
   type        = "string"
   default     = "200-299"
 }
+
+variable "allow_overwrite" {
+  description = "Allow creation of this record in Terraform to overwrite an existing record, if any."
+  type        = "string"
+  default     = "false"
+}
