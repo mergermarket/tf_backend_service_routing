@@ -72,6 +72,8 @@ resource "aws_alb_target_group" "target_group" {
   lifecycle {
     create_before_destroy = true
   }
+
+  tags                  = "${var.tags}"
 }
 
 resource "aws_route53_record" "dns_record" {

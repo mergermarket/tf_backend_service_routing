@@ -87,3 +87,9 @@ variable "allow_overwrite" {
   type        = "string"
   default     = "false"
 }
+
+variable "tags" {
+  description = "A mapping of tags to assign to the target group."
+  type        = "map"
+  default     = {}
+}
